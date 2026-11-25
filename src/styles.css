@@ -77,6 +77,16 @@
 	}
 }
 
+/* lichess adds small dark text shadows (e.g. 0.5px on buttons/links, and on most text with the
+   transparent background theme); with this flat theme they only blur the glyphs.
+   lichess sets some of these with !important on ID/class selectors, so the no-op
+   :not(#\#) pair lifts this rule's specificity above them */
+*:not(#\#):not(#\#),
+*:not(#\#):not(#\#)::before,
+*:not(#\#):not(#\#)::after {
+	text-shadow: none !important;
+}
+
 html {
 	font-family: 'Red Hat Text', sans-serif !important;
 	--primaryColor: #9fc0a2 !important;
@@ -382,6 +392,8 @@ bad,
 	padding: 10px 14px !important;
 	text-transform: lowercase !important;
 	transition: all 0.2s ease-in-out !important;
+	/* lichess's dark half-pixel shadow is meant for white text; on our dark-on-light buttons it smears the glyphs */
+	text-shadow: none !important;
 }
 
 .button:hover {
@@ -1240,6 +1252,17 @@ signal > i {
 	color: var(--backgroundColor) !important;
 }
 
+/* "Notification popups disabled by browser setting" banner: grey text on lichess's orange was unreadable */
+#notify-app .browser-notification,
+#notify-app .browser-notification * {
+	background: var(--secondaryColor) !important;
+	color: var(--backgroundColor) !important;
+}
+
+#notify-app .browser-notification * {
+	background: none !important;
+}
+
 #challenge-app.rendered {
 	padding: 0 !important;
 }
@@ -1705,15 +1728,37 @@ g[stroke='#888'] {
 	grid-gap: 10px !important;
 }
 
+/* wide screens: lichess puts Donate/Swag inside the TV and puzzle columns; show them once, stacked below the right column instead */
+@media (min-width: 1260px) {
+	.lobby__tv .lobby__support-link,
+	.lobby__puzzle .lobby__support-link {
+		display: none !important;
+	}
+
+	.lobby__support {
+		display: flex !important;
+		flex-direction: column !important;
+		/* 'support' isn't a named area at this width; pin to the last column so it can't spawn extra columns */
+		grid-area: auto / -2 / auto / -1 !important;
+	}
+}
+
 .lobby__support a,
 .lobby__support-link {
 	display: flex !important;
-	flex-grow: 1 !important;
 	box-shadow: none !important;
 	background: var(--surfaceColor) !important;
-	padding: 20px !important;
 	border-radius: var(--borderRadius) !important;
 	border: 2px solid var(--surfaceColorHover) !important;
+}
+
+/* keep Donate/Swag compact: don't stretch to the grid row's height */
+.lobby__support {
+	align-self: start !important;
+}
+
+.lobby__support a {
+	padding: 10px 14px !important;
 }
 
 .lobby__support i::before,
@@ -1733,16 +1778,20 @@ g[stroke='#888'] {
 	border: 2px solid var(--surfaceColorHover);
 	padding: 0 !important;
 	overflow: hidden !important;
+	/* size to its buttons instead of stretching to the grid row's height */
+	align-self: start !important;
 }
 
 .lobby__tournaments-simuls {
 	margin: 20px 0 !important;
+	/* size to the listed events instead of stretching to the grid row's height */
+	align-self: start !important;
 }
 
 .lobby__tournaments,
 .lobby__simuls {
 	max-height: none !important;
-	height: 100% !important;
+	height: auto !important;
 }
 
 .lobby__start {
@@ -1751,7 +1800,6 @@ g[stroke='#888'] {
 	flex-direction: column !important;
 	justify-content: center !important;
 	align-items: flex-start !important;
-	flex-grow: 1 !important;
 	width: 100% !important;
 	gap: 0 !important;
 	overflow: hidden !important;
@@ -1764,11 +1812,11 @@ g[stroke='#888'] {
 .lobby__start button {
 	margin: 0 !important;
 	border-radius: 0 !important;
-	flex: 1 !important;
+	flex: none !important;
 	width: 100% !important;
 	background: none !important;
-	padding: 40px !important;
-	font-size: 1.25rem !important;
+	padding: 16px 20px !important;
+	font-size: 1.1rem !important;
 	gap: 0.5rem !important;
 	text-transform: capitalize !important;
 	border-top: 2px solid var(--surfaceColorHover) !important;
@@ -2772,6 +2820,12 @@ main.round {
 	border-top: 2px solid var(--surfaceColorHover) !important;
 }
 
+/* lichess only grows the chat to fit the live board on broadcasts without a tour page; do it everywhere so the board isn't cut off */
+.mchat:has(.liveboard.mchat__tab-active) {
+	height: auto !important;
+	max-height: none !important;
+}
+
 .mchat-optional .mchat__tab-active,
 .mchat .mchat__tab-active,
 .mchat__tab:hover {
@@ -3736,6 +3790,11 @@ a.analyse {
 
 .relay-tour__text h1 {
 	color: var(--secondaryColor) !important;
+}
+
+/* lichess centers the title and round picker beside the video; pin them to the top */
+.relay-tour__header__content {
+	align-self: flex-start !important;
 }
 
 .study__metadata h2 .liking:hover,
@@ -4895,9 +4954,24 @@ iframe.analyse {
 	margin-right: 10px !important;
 }
 
-.ublog-post__actions .button {
-	width: 200px !important;
-	border-radius: calc(var(--borderRadius) / 2) !important;
+/* lichess's blue follow icon clashes with the button fill */
+.ublog-post__follow::before {
+	color: inherit !important;
+}
+
+/* Openings search: keep lichess's joined input + button (our .button rounds all corners) */
+.opening__search-form {
+	align-items: stretch !important;
+}
+
+.opening__search-form__input {
+	border-radius: var(--borderRadius) 0 0 var(--borderRadius) !important;
+}
+
+.opening__search-form .button {
+	height: auto !important;
+	margin: 0 !important;
+	border-radius: 0 var(--borderRadius) var(--borderRadius) 0 !important;
 }
 
 /* Practice */
@@ -5333,6 +5407,20 @@ th[role='columnheader']:not(.no-sort):after,
 	border: 2px solid var(--surfaceColorHover) !important;
 	/* lichess sizes this box inline to fit its rows; keep the border from eating into that height */
 	box-sizing: content-box !important;
+	/* never shorter than one game row: 2 player lines + 1em padding + border. lh (not em) so it also
+	   grows with Firefox's minimum font size, which enlarges text without changing em */
+	line-height: 1.25 !important;
+	min-height: calc(2lh + 1em + 1px) !important;
+}
+
+/* lichess fixes rows at 50px, which clips the second player with larger fonts; let rows grow with the text */
+.relay-game {
+	height: auto !important;
+	min-height: 50px !important;
+}
+
+.relay-game__player {
+	line-height: 1.25 !important;
 }
 
 .relay-game {

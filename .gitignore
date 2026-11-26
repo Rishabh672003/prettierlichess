@@ -2,6 +2,9 @@ dist-chrome/
 dist-firefox/
 node_modules/
 dist/
+.env
+web-ext-artifacts/
+*.zip
 .DS_Store
 cypress/videos
 cypress/downloads

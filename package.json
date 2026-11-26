@@ -6,6 +6,7 @@
     "build": "npm run build:chrome && npm run build:firefox",
     "build:chrome": "cross-env BROWSER=chrome npx webpack",
     "build:firefox": "cross-env BROWSER=firefox npx webpack",
+    "sign:firefox": "npm run build:firefox && set -a && . ./.env && set +a && WEB_EXT_API_KEY=\"$JWT_ISSUER\" WEB_EXT_API_SECRET=\"$JWT_SECRET\" web-ext sign --source-dir dist-firefox --channel unlisted",
     "watch": "npx concurrently --names \"chrome,firefox\" --prefix-colors \"blue,red\" \"cross-env BROWSER=chrome npx webpack -w\" \"cross-env BROWSER=firefox npx webpack -w\"",
     "popup:serve": "cd dist-chrome && node ../testing/popupServer.js",
     "popup:run": "npm run build:chrome && cd dist-chrome && node ../testing/popupServer.js",
@@ -35,7 +36,7 @@
     "mime": "^3.0.0",
     "prettier": "^3.0.3",
     "start-server-and-test": "^2.0.1",
-    "web-ext": "^7.8.0",
+    "web-ext": "^10.8.0",
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4"
   },

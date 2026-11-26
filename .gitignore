@@ -10,4 +10,4 @@ cypress/videos
 cypress/downloads
 cypress/fixtures
 cypress/screenshots
-
+.playwright-mcp

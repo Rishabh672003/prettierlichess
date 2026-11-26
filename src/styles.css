@@ -2397,6 +2397,108 @@ button.rematch-decline::before {
 	border-inline-start: none !important;
 }
 
+/* Show a computer comment only for the current move (or while browsing its line), chess.com style.
+   A comment on a white move sits between "…" filler cells, so those are hidden along with it. */
+.tview2-column
+	> interrupt:has(> comment:is(.inaccuracy, .mistake, .blunder)):not(
+		move.active + interrupt,
+		move.active + move.empty + interrupt,
+		:has(move.active)
+	),
+.tview2-column
+	> move.empty:has(
+		+ interrupt > comment:is(.inaccuracy, .mistake, .blunder)
+	):not(move.active + move.empty, :has(+ interrupt move.active)),
+.tview2-column
+	> interrupt:has(> comment:is(.inaccuracy, .mistake, .blunder)):not(
+		move.active + move.empty + interrupt,
+		:has(move.active)
+	)
+	+ index:has(+ move.empty),
+.tview2-column
+	> interrupt:has(> comment:is(.inaccuracy, .mistake, .blunder)):not(
+		move.active + move.empty + interrupt,
+		:has(move.active)
+	)
+	+ index
+	+ move.empty {
+	display: none !important;
+}
+
+.tview2-column > interrupt {
+	margin: 10px !important;
+	max-width: calc(100% - 20px) !important;
+	border-radius: var(--borderRadius) !important;
+}
+
+/* tint each comment box with its severity colour */
+.tview2-column > interrupt:has(> comment.inaccuracy) {
+	--severityRGB: var(--primaryColorRGB);
+}
+
+.tview2-column > interrupt:has(> comment.mistake) {
+	--severityRGB: var(--secondaryColorRGB);
+}
+
+.tview2-column > interrupt:has(> comment.blunder) {
+	--severityRGB: var(--tertiaryColorRGB);
+}
+
+.tview2-column > interrupt:has(> comment:is(.inaccuracy, .mistake, .blunder)) {
+	background-image: linear-gradient(
+		rgba(var(--severityRGB), 0.12),
+		rgba(var(--severityRGB), 0.12)
+	) !important;
+	border-left: 3px solid rgb(var(--severityRGB)) !important;
+	/* rounded corners bend the bar, so square it off flush with the move list edge */
+	border-top-left-radius: 0 !important;
+	border-bottom-left-radius: 0 !important;
+	margin-left: 0 !important;
+	max-width: calc(100% - 10px) !important;
+}
+
+/* the suggested line is dimmer than the main moves by default; match them */
+.tview2-column
+	> interrupt:has(> comment:is(.inaccuracy, .mistake, .blunder))
+	lines
+	move {
+	color: var(--c-base) !important;
+}
+
+.tview2-column
+	> interrupt:has(> comment:is(.inaccuracy, .mistake, .blunder))
+	lines
+	index {
+	opacity: 0.8 !important;
+}
+/* ?!, ? and ?? as theme-coloured badges instead of bare text */
+.tview2-column > move:is(.inaccuracy, .mistake, .blunder) > glyph {
+	display: inline-flex !important;
+	align-self: center;
+	align-items: center;
+	justify-content: center;
+	line-height: 1 !important;
+	min-width: 18px;
+	height: 18px;
+	padding: 0 4px;
+	margin-left: 5px;
+	border-radius: 9px;
+	font-size: 11px !important;
+	font-weight: bold;
+	color: var(--backgroundColor) !important;
+}
+
+.tview2-column > move.inaccuracy > glyph {
+	background: var(--primaryColor) !important;
+}
+
+.tview2-column > move.mistake > glyph {
+	background: var(--secondaryColor) !important;
+}
+
+.tview2-column > move.blunder > glyph {
+	background: var(--tertiaryColor) !important;
+}
 .chat__members__inner > * {
 	display: flex !important;
 	flex-wrap: wrap !important;

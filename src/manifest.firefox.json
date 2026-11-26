@@ -38,8 +38,8 @@
 	"web_accessible_resources": ["styles.css", "fonts/*", "pieces/*", "masks/*"],
 	"browser_specific_settings": {
 		"gecko": {
-			"id": "{8ad4bea8-ad8d-4e98-b434-a76065dee6cb}",
-			"strict_min_version": "57.0"
+			"id": "prettierlichess@rishabh672003",
+			"strict_min_version": "58.0"
 		}
 	}
 }
